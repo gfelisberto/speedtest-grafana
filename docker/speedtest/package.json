@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "delay": "^5.0.0",
-    "execa": "^4.0.0",
+    "execa": "^5.0.0",
     "influx": "^5.5.1"
   }
 }
