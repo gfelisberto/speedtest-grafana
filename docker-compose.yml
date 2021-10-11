@@ -18,6 +18,7 @@ services:
     image: grafana/grafana:8.0.3
     volumes:
       - "./docker/grafana/provisioning:/etc/grafana/provisioning"
+      - "./data/grafana:/var/lib/grafana"
     ports:
       - "${GRAFANA_PORT}:3000"
     environment:
