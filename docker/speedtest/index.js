@@ -39,20 +39,23 @@ const getSpeedMetrics = async () => {
 
   const { stdout } = await execa("speedtest", args);
   const result = JSON.parse(stdout);
-  return {
-    upload: bitToMbps(result.upload.bandwidth),
-    download: bitToMbps(result.download.bandwidth),
-    ping: result.ping.latency,
-    jitter: result.ping.jitter,
-    server_id: result.server.id,
-    url: result.result.url
-  };
+  return { 
+	data: {
+		upload: bitToMbps(result.upload.bandwidth),
+		download: bitToMbps(result.download.bandwidth),
+		ping: result.ping.latency,
+		jitter: result.ping.jitter,
+		url: result.result.url
+	},
+	tags {
+		server_id: result.server.id
+	};
 };
 
 const pushToInflux = async (influx, metrics) => {
-  const points = Object.entries(metrics).map(([measurement, value]) => ({
+  const points = Object.entries(metrics.data).map(([measurement, value]) => ({
     measurement,
-    tags: { host: process.env.SPEEDTEST_HOST },
+    tags: { host: process.env.SPEEDTEST_HOST, server_id: metrics.tags.server_id },
     fields: { value },
   }));
 
