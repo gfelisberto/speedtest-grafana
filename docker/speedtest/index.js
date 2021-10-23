@@ -47,7 +47,7 @@ const getSpeedMetrics = async () => {
 		jitter: result.ping.jitter,
 		url: result.result.url
 	},
-	tags {
+	tags: {
 		server_id: result.server.id
 	};
 };
