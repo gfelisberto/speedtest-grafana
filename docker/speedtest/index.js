@@ -44,6 +44,8 @@ const getSpeedMetrics = async () => {
     download: bitToMbps(result.download.bandwidth),
     ping: result.ping.latency,
     jitter: result.ping.jitter,
+    server_id: result.server.id,
+    url: result.result.url
   };
 };
 
