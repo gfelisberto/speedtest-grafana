@@ -50,6 +50,7 @@ const getSpeedMetrics = async () => {
 	tags: {
 		server_id: result.server.id
 	}
+  };
 };
 
 const pushToInflux = async (influx, metrics) => {
