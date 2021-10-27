@@ -21,24 +21,32 @@ process.env.SPEEDTEST_INTERVAL = process.env.SPEEDTEST_INTERVAL
   ? process.env.SPEEDTEST_INTERVAL
   : 3600;
 
+const baseArgs = [
+        "--accept-license",
+        "--accept-gdpr",
+        "-f",
+        "json"
+]
+
 const bitToMbps = (bit) => (bit / 1000 / 1000) * 8;
 
 const log = (message, severity = "Info") =>
   console.log(`[${severity.toUpperCase()}][${new Date()}] ${message}`);
 
-const getSpeedMetrics = async () => {
-  const args = process.env.SPEEDTEST_SERVER
-    ? [
-        "--accept-license",
-        "--accept-gdpr",
-        "-f",
-        "json",
-        "--server-id=" + process.env.SPEEDTEST_SERVER,
-      ]
-    : ["--accept-license", "--accept-gdpr", "-f", "json"];
-
-  const { stdout } = await execa("speedtest", args);
+const getClosestServers = async (num_servers) => {
+  const { stdout } = await execa("speedtest", baseArgs.concat("-L"));
   const result = JSON.parse(stdout);
+  const servers = result.servers;
+  var serverList = "";
+  for (i = 0; i < num_servers; i++) {
+    serverlist = serverlist + " " + servers[Math.floor(Math.random() * array.length)].id
+  }
+}
+
+const getSpeedMetrics = async (server_id) => {
+  const { stdout } = await execa("speedtest", baseArgs.concat("--server-id=" + server_id));
+  const result = JSON.parse(stdout);
+  //log(JSON.stringify(result));
   return { 
 	data: {
 		upload: bitToMbps(result.upload.bandwidth),
@@ -59,7 +67,7 @@ const pushToInflux = async (influx, metrics) => {
     tags: { host: process.env.SPEEDTEST_HOST, server_id: metrics.tags.server_id },
     fields: { value },
   }));
-
+  log("Influx data:" + JSON.stringify(points));
   await influx.writePoints(points);
 };
 
@@ -74,14 +82,21 @@ const pushToInflux = async (influx, metrics) => {
 
     while (true) {
       log("Starting speedtest...");
-      const speedMetrics = await getSpeedMetrics();
-      log(
-        `Speedtest results - Download: ${speedMetrics.download}, Upload: ${speedMetrics.upload}, Ping: ${speedMetrics.ping}, Jitter:${speedMetrics.jitter}`
-      );
-      await pushToInflux(influx, speedMetrics);
-
-      log(`Sleeping for ${process.env.SPEEDTEST_INTERVAL} seconds...`);
-      await delay(process.env.SPEEDTEST_INTERVAL * 1000);
+      start = Date.now();
+      const servers = process.env.SPEEDTEST_SERVERS ? 
+	process.env.SPEEDTEST_SERVERS.split(' ')
+	: getClosestServers(2);
+      for (var i = 0; i < servers.length; i++) {
+        const serverId = servers[i];
+        const speedMetrics = await getSpeedMetrics(serverId);
+	//log("Returned object:" + JSON.stringify(speedMetrics));
+        log(
+          `Speedtest results - ServerId: ${serverId}, Download: ${speedMetrics.data.download}, Upload: ${speedMetrics.data.upload}, Ping: ${speedMetrics.data.ping}, Jitter:${speedMetrics.data.jitter}`
+        );
+        await pushToInflux(influx, speedMetrics);
+      }
+      log(`Sleeping for ${process.env.SPEEDTEST_INTERVAL - (Date.now() -start)/1000 } seconds...`);
+      await delay(process.env.SPEEDTEST_INTERVAL * 1000 - (Date.now() - start) );
     }
   } catch (err) {
     console.error(err.message);

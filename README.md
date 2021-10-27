@@ -29,16 +29,16 @@ docker-compose up -d
 
 You can make use of the following environment variables / configurations:
 
-| Environment variable           | Default value | Description                                                                |
-| ------------------------------ | ------------- | -------------------------------------------------------------------------- |
-| `GRAFANA_PORT`                 | `3000`        | Port to bind Grafana webinterface on the host system                       |
-| `SPEEDTEST_SPEEDTEST_INTERVAL` | `3600`        | Interval/pause (in seconds) between speedtests                             |
-| `SPEEDTEST_HOST`               | `local`       | Display name of the client                                                 |
-| `SPEEDTEST_SERVER`             | none          | Optionally set specific speedtest.net server ID, otherwise use the closest |
-| `INFLUXDB_DB`                  | `speedtest`   | Database to save speedtest results                                         |
-| `INFLUXDB_HOST`                | `influxdb`    | Name of the InfluxDB host/containers                                       |
-| `INFLUXDB_USERNAME`            | `root`        | Username for InfluxDB authentication                                       |
-| `INFLUXDB_PASSWORD`            | `root`        | Password for InfluxDB authentication                                       |
+| Environment variable           | Default value | Description                                                                                          |
+|--------------------------------|---------------|------------------------------------------------------------------------------------------------------|
+| `GRAFANA_PORT`                 | `3000`        | Port to bind Grafana webinterface on the host system                                                 |
+| `SPEEDTEST_SPEEDTEST_INTERVAL` | `3600`        | Interval/pause (in seconds) between speedtests                                                       |
+| `SPEEDTEST_HOST`               | `local`       | Display name of the client                                                                           |
+| `SPEEDTEST_SERVERS`            | none          | Optionally set a space separated list of specific speedtest.net server ID, otherwise use the closest |
+| `INFLUXDB_DB`                  | `speedtest`   | Database to save speedtest results                                                                   |
+| `INFLUXDB_HOST`                | `influxdb`    | Name of the InfluxDB host/containers                                                                 |
+| `INFLUXDB_USERNAME`            | `root`        | Username for InfluxDB authentication                                                                 |
+| `INFLUXDB_PASSWORD`            | `root`        | Password for InfluxDB authentication                                                                 |
 
 ## Usage
 

@@ -17,8 +17,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 1,
-  "iteration": 1635066736176,
+  "id": 2,
+  "iteration": 1635109565497,
   "links": [],
   "panels": [
     {
@@ -119,6 +119,12 @@
               "key": "host",
               "operator": "=~",
               "value": "/^$host$/"
+            },
+            {
+              "condition": "AND",
+              "key": "server_id",
+              "operator": "=~",
+              "value": "/^$server_id$/"
             }
           ]
         }
@@ -223,6 +229,12 @@
               "key": "host",
               "operator": "=~",
               "value": "/^$host$/"
+            },
+            {
+              "condition": "AND",
+              "key": "server_id",
+              "operator": "=~",
+              "value": "/^$server_id$/"
             }
           ]
         }
@@ -324,6 +336,12 @@
               "key": "host",
               "operator": "=~",
               "value": "/^$host$/"
+            },
+            {
+              "condition": "AND",
+              "key": "server_id",
+              "operator": "=~",
+              "value": "/^$server_id$/"
             }
           ]
         }
@@ -425,6 +443,12 @@
               "key": "host",
               "operator": "=~",
               "value": "/^$host$/"
+            },
+            {
+              "condition": "AND",
+              "key": "server_id",
+              "operator": "=~",
+              "value": "/^$server_id$/"
             }
           ]
         },
@@ -471,6 +495,12 @@
               "key": "host",
               "operator": "=~",
               "value": "/^$host$/"
+            },
+            {
+              "condition": "AND",
+              "key": "server_id",
+              "operator": "=~",
+              "value": "/^$server_id$/"
             }
           ]
         }
@@ -715,7 +745,7 @@
       }
     }
   ],
-  "refresh": "",
+  "refresh": "5m",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -809,5 +839,5 @@
   "timezone": "",
   "title": "Speedtest results",
   "uid": "0A6hxROiz",
-  "version": 2
+  "version": 4
 }
