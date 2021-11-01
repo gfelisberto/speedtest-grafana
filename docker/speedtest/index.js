@@ -37,10 +37,15 @@ const getClosestServers = async (num_servers) => {
   const { stdout } = await execa("speedtest", baseArgs.concat("-L"));
   const result = JSON.parse(stdout);
   const servers = result.servers;
-  var serverList = "";
-  for (i = 0; i < num_servers; i++) {
-    serverlist = serverlist + " " + servers[Math.floor(Math.random() * array.length)].id
+  var serverList = [];
+  while (serverList.length < num_servers) {
+    const randomServer = servers[Math.floor(Math.random() * servers.length)].id;
+    if( !serverList.includes(randomServer)) {
+        serverList.push(randomServer)
+    }
+
   }
+  return serverList;
 }
 
 const getSpeedMetrics = async (server_id) => {
@@ -83,9 +88,9 @@ const pushToInflux = async (influx, metrics) => {
     while (true) {
       log("Starting speedtest...");
       start = Date.now();
-      const servers = process.env.SPEEDTEST_SERVERS ? 
-	process.env.SPEEDTEST_SERVERS.split(' ')
-	: getClosestServers(2);
+      const servers = process.env.SPEEDTEST_SERVERS ?
+        process.env.SPEEDTEST_SERVERS.split(' ') :
+        await getClosestServers(2);
       for (var i = 0; i < servers.length; i++) {
         const serverId = servers[i];
         const speedMetrics = await getSpeedMetrics(serverId);

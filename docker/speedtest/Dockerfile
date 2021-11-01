@@ -1,4 +1,4 @@
-FROM debian:10-slim AS get-speedtest
+FROM debian:11-slim AS get-speedtest
 
 RUN apt-get update && apt-get install gnupg1 apt-transport-https dirmngr lsb-release -y
 RUN apt-get install curl -y

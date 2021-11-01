@@ -1,3 +1,4 @@
 data/influxdb/*
 data/grafana/*
 .env
+.idea/
